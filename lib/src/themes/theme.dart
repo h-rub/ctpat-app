@@ -1,20 +1,17 @@
+import 'package:ctpat/src/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
-
-const Color bluishClr = Color(0xFF4e5ae8);
-const Color yellowClr = Color(0xFFFFB746);
-const Color pinkClr = Color(0xFFff4667);
-const Color white = Colors.white;
-const primaryClr = Color.fromRGBO(20, 125, 137, 1);
-final Color darkGreyClr = Color.fromRGBO(11, 16, 38, 1);
-Color darkHeaderClr = Colors.grey[800];
 
 class Themes {
   static final light = ThemeData(
     backgroundColor: Colors.white,
     primaryColor: primaryClr,
     brightness: Brightness.light,
+    colorScheme: ThemeData().colorScheme.copyWith(
+          primary: primaryClr,
+          secondary: primaryClr,
+        ),
   );
   static final dark = ThemeData(
     backgroundColor: darkGreyClr,

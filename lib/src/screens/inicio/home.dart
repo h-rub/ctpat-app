@@ -4,6 +4,8 @@ import 'package:ctpat/src/providers/navegacion_info.dart';
 import 'package:ctpat/src/providers/shipping_info.dart';
 import 'package:ctpat/src/providers/user_info.dart';
 import 'package:ctpat/src/themes/theme.dart';
+import 'package:ctpat/src/tokens/colors.dart';
+import 'package:ctpat/src/tokens/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_storage/get_storage.dart';
@@ -31,17 +33,15 @@ class _HomeState extends State<Home> {
     });
     print("Cargando datos");
 
-    String url = "http://ctpat.syncronik.com/api/v1/forms/all";
+    Map<String, String> requestHeaders = {
+      'Accept': 'application/json',
+      'apikey': 'cFmS80yo.noGef99U2EGqhARloqbE1qEhDFKVLIih'
+    };
+
+    String url = "https://api.embraco.com/ctpat/forms/forms/all";
     print(url);
     var jsonResponse;
-    var res = await http.get(
-      url,
-      headers: {
-        //'Authorization': "Token ${token}",
-        'Authorization': 'Api-Key TzMKJVoE.1bcN3fRTRZnDSO4IlJ6gvblHl2J7KBf5',
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-    );
+    var res = await http.get(url, headers: requestHeaders);
 
     if (res.statusCode == 200) {
       String source = Utf8Decoder().convert(res.bodyBytes);
@@ -93,13 +93,9 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Miercoles 10 Noviembre 2021\nBienvenido ${userInfo.firstName}",
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey,
-                          ),
-                        ),
+                            // TODO: Hacerlo dinámico
+                            "Miercoles 10 Noviembre 2021\nBienvenido ${userInfo.firstName}",
+                            style: body),
                         GestureDetector(
                           onTap: () {
                             print("Actualizar data");
@@ -142,6 +138,7 @@ class _HomeState extends State<Home> {
                     onTap: () {
                       //TODO: Implementar el acceso al formulario
                       print("Registrar embarque");
+                      Navigator.of(context).pushNamed('create');
                     },
                     child: Container(
                       height: _height / 7.5,
@@ -169,6 +166,7 @@ class _HomeState extends State<Home> {
                                     onPressed: () {
                                       //TODO: Implementar el acceso al formulario
                                       print("Registrar embarque");
+                                      Navigator.of(context).pushNamed('create');
                                     }),
                                 Text(
                                   "Registrar embarque",
@@ -296,6 +294,7 @@ class HomeLoading extends StatelessWidget {
               onTap: () {
                 //TODO: Implementar el acceso al formulario
                 print("Registrar embarque");
+                Navigator.of(context).pushNamed('create');
               },
               child: Container(
                 height: _height / 7.5,

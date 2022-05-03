@@ -34,6 +34,8 @@ dependencies:
   custom_refresh_indicator: ^0.9.0
   shimmer_animation: ^1.0.0
   shared_preferences: ^0.5.12+4
+  validators: ^2.0.1
+  fa_stepper: ^0.0.2
 
 
 dev_dependencies:

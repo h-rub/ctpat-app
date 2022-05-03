@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ctpat/src/providers/navegacion_info.dart';
 import 'package:ctpat/src/screens/homepage/home_page.dart';
 import 'package:ctpat/src/themes/theme.dart';
+import 'package:ctpat/src/tokens/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:get_storage/get_storage.dart';
@@ -92,17 +93,16 @@ class _ShippingDetailsState extends State<ShippingDetails>
     final shipmentID = _box.read("shipmentID");
     print("Cargando detalles del Shipment");
 
+    Map<String, String> requestHeaders = {
+      'Accept': 'application/json',
+      'apikey': 'cFmS80yo.noGef99U2EGqhARloqbE1qEhDFKVLIih'
+    };
+
     String url =
-        "http://ctpat.syncronik.com/api/v1/forms/details?shipment=${shipmentID}";
+        "https://api.embraco.com/ctpat/forms/forms/details?shipment=${shipmentID}";
     print(url);
     var jsonResponse;
-    var res = await http.get(
-      url,
-      headers: {
-        //'Authorization': "Token ${token}",
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-    );
+    var res = await http.get(url, headers: requestHeaders);
 
     if (res.statusCode == 200) {
       String source = Utf8Decoder().convert(res.bodyBytes);
@@ -115,7 +115,7 @@ class _ShippingDetailsState extends State<ShippingDetails>
         checkMap.addAll(x['checklist']);
         //print(x['ingreso']);
         //print(x['checklist']);
-        //print(x['revision_canina']);
+        print(x['revision_canina']);
       }
       thirdMap.forEach((k, v) => resumenListAPITemp.add(ResumenData(k, v)));
       checkMap.forEach((k, v) => checklistAPITemp.add(ResumenData(k, v)));
@@ -275,6 +275,7 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                       Container(
                                         margin:
                                             EdgeInsets.only(top: 16, left: 0),
+                                        // TODO: Hacerlo dinámico
                                         child: Text("Apodaca"),
                                       ),
                                       SizedBox(
@@ -701,6 +702,7 @@ class ScreenLoading extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 //TODO: Implementar el acceso al formulario
+                Navigator.of(context).pushNamed('create');
                 print("Registrar embarque");
               },
               child: Container(

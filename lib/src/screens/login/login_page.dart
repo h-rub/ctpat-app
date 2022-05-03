@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:ctpat/src/providers/user_info.dart';
 import 'package:ctpat/src/screens/homepage/home_page.dart';
 import 'package:ctpat/src/themes/theme.dart';
+import 'package:ctpat/src/tokens/colors.dart';
+import 'package:ctpat/src/tokens/typography.dart';
 import 'package:ctpat/src/utils/alert_dialog.dart';
+import 'package:ctpat/src/widgets/input_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -12,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:validators/validators.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -46,20 +50,22 @@ class _LoginState extends State<Login> {
 
   // Login API Call section
   signIn(String email, String password, userInfo) async {
+    Map<String, String> requestHeaders = {
+      'Accept': 'application/json',
+      'apikey': 'cFmS80yo.noGef99U2EGqhARloqbE1qEhDFKVLIih'
+    };
     //final SharedPreferences prefs = await _prefs;
     final _box = GetStorage();
-    String url = "http://ctpat.syncronik.com/api/v1/auth/login/";
+    String url = "https://api.embraco.com/ctpat/forms/auth/login/";
     Map body = {"email": email, "password": password};
     var jsonResponse;
-    var res = await http.post(
-      url,
-      body: body,
-      headers: {
-        //'Authorization': "Token ${token}",
-        'Authorization': 'Api-Key TzMKJVoE.1bcN3fRTRZnDSO4IlJ6gvblHl2J7KBf5',
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-    );
+    var res = await http.post(url, body: body, headers: requestHeaders
+        // headers: {
+        //   //'Authorization': "Token ${token}",
+        //   'Authorization': 'Api-Key TzMKJVoE.1bcN3fRTRZnDSO4IlJ6gvblHl2J7KBf5',
+        //   'Content-Type': 'application/json; charset=utf-8'
+        // },
+        );
 
     if (res.statusCode == 200) {
       jsonResponse = json.decode(res.body);
@@ -159,58 +165,35 @@ class _LoginState extends State<Login> {
                         keyboardDismissBehavior:
                             ScrollViewKeyboardDismissBehavior.onDrag,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              'Bienvenido',
-                              style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500),
-                            ),
+                          Text(
+                            'Bienvenido',
+                            style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500),
                           ),
-                          Container(
-                            color: Color(0xfff5f5f5),
-                            child: TextFormField(
+                          SizedBox(height: 10),
+                          Input(
                               controller: _emailController,
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                              ),
-                              decoration: InputDecoration(
-                                labelText: 'Correo electrónico',
-                                prefixIcon: Icon(Icons.mail_outline),
-                                labelStyle: GoogleFonts.poppins(fontSize: 17),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            color: Color(0xfff5f5f5),
-                            child: TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              autofillHint: [AutofillHints.email],
+                              label: "Correo electrónico",
+                              hintText: "Correo electrónico",
+                              prefixIcon: Icon(Icons.person_sharp),
+                              autoFocus: true,
+                              validator: (value) => !isEmail(value)
+                                  ? "Ingrese un email valido"
+                                  : null),
+                          SizedBox(height: 10),
+                          PasswordField(
+                              label: "Contraseña",
+                              hintText: "Escriba su contraseña",
                               controller: _passwordController,
-                              obscureText: !_passwordVisible,
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                              ),
-                              decoration: InputDecoration(
-                                  labelText: 'Contraseña',
-                                  prefixIcon: Icon(Icons.lock_outline),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _passwordVisible
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
-                                    ),
-                                    onPressed: () {
-                                      // Update the state i.e. toogle the state of passwordVisible variable
-                                      setState(() {
-                                        _passwordVisible = !_passwordVisible;
-                                      });
-                                    },
-                                  ),
-                                  labelStyle:
-                                      GoogleFonts.poppins(fontSize: 17)),
-                            ),
-                          ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "Este campo es requerido";
+                                }
+                              }),
                           Padding(
                             padding: EdgeInsets.only(top: 20),
                             child: MaterialButton(
@@ -235,10 +218,7 @@ class _LoginState extends State<Login> {
                               },
                               child: Text(
                                 'Iniciar sesión',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: subHeading2White,
                               ),
                               color: primaryClr,
                               elevation: 0,
@@ -263,10 +243,7 @@ class _LoginState extends State<Login> {
                                                     builder: (context) =>
                                                         HomePage())),
                                       text: "¿Olvidaste tu contraseña?",
-                                      style: GoogleFonts.poppins(
-                                        color: primaryClr,
-                                        fontSize: 17,
-                                      ))
+                                      style: bodyLink)
                                 ]),
                               ),
                             ),

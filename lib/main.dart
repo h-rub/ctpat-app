@@ -1,6 +1,7 @@
 import 'package:ctpat/src/providers/navegacion_info.dart';
 import 'package:ctpat/src/providers/user_info.dart';
 import 'package:ctpat/src/screens/details/shipping_details.dart';
+import 'package:ctpat/src/screens/forms/create_form.dart';
 import 'package:ctpat/src/screens/login/login_page.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
         initialRoute: '/login',
         routes: {
           '/login': (context) => LoginPage(),
-          '/shipping-details': (context) => ShippingDetails()
+          '/shipping-details': (context) => ShippingDetails(),
+          'create': (context) => CreateFormScreeen()
         },
       ),
     );
