@@ -9,6 +9,7 @@ import 'package:ctpat/src/utils/alert_dialog.dart';
 import 'package:ctpat/src/widgets/input_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -58,6 +59,7 @@ class _LoginState extends State<Login> {
     final _box = GetStorage();
     String url = "https://api.embraco.com/ctpat/forms/auth/login/";
     Map body = {"email": email, "password": password};
+    EasyLoading.show(status: "Cargando...");
     var jsonResponse;
     var res = await http.post(url, body: body, headers: requestHeaders
         // headers: {
@@ -71,6 +73,9 @@ class _LoginState extends State<Login> {
       jsonResponse = json.decode(res.body);
       print("Status code ${res.statusCode}");
       print("Response JSON ${res.body}");
+      EasyLoading.showSuccess("Bienvenido");
+
+      EasyLoading.dismiss();
 
       if (jsonResponse != Null) {
         setState(() {
@@ -108,6 +113,8 @@ class _LoginState extends State<Login> {
       print("No existe el usuario");
       showAlertDialog("Error", "Email o contraseña incorrectos", context);
     } else if (res.statusCode == 500) {
+      EasyLoading.showError("Ups! Ocurrió un error...",
+          duration: const Duration(milliseconds: 3000));
       print("Error del servidor");
     }
   }
@@ -145,7 +152,7 @@ class _LoginState extends State<Login> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        'Control CTPAT',
+                        'T-Compliance NGApp',
                         style: GoogleFonts.poppins(
                             color: Colors.grey[200],
                             fontSize: 30,
@@ -177,8 +184,8 @@ class _LoginState extends State<Login> {
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
                               autofillHint: [AutofillHints.email],
-                              label: "Correo electrónico",
-                              hintText: "Correo electrónico",
+                              label: "Correo electrónico / Usuario",
+                              hintText: "Correo electrónico / Usuario",
                               prefixIcon: Icon(Icons.person_sharp),
                               autoFocus: true,
                               validator: (value) => !isEmail(value)
@@ -229,25 +236,25 @@ class _LoginState extends State<Login> {
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 25),
-                            child: Center(
-                              child: RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () =>
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        HomePage())),
-                                      text: "¿Olvidaste tu contraseña?",
-                                      style: bodyLink)
-                                ]),
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: EdgeInsets.only(top: 25),
+                          //   child: Center(
+                          //     child: RichText(
+                          //       text: TextSpan(children: [
+                          //         TextSpan(
+                          //             recognizer: TapGestureRecognizer()
+                          //               ..onTap = () =>
+                          //                   Navigator.pushReplacement(
+                          //                       context,
+                          //                       MaterialPageRoute(
+                          //                           builder: (context) =>
+                          //                               HomePage())),
+                          //             text: "¿Olvidaste tu contraseña?",
+                          //             style: bodyLink)
+                          //       ]),
+                          //     ),
+                          //   ),
+                          // ),
                         ]),
                   ))
             ]),

@@ -78,14 +78,17 @@ class _ShippingDetailsState extends State<ShippingDetails>
   List data;
   List resumen = [];
   List checkList = [];
+  List revisionCanina = [];
 
   bool isLoading = true;
 
   loadDataShipment() async {
     List resumenListAPITemp = [];
     List checklistAPITemp = [];
+    List revisionCaninaAPITemp = [];
     var thirdMap = {};
     var checkMap = {};
+    var revisionCanMap = {};
     setState(() {
       isLoading = true;
     });
@@ -113,19 +116,25 @@ class _ShippingDetailsState extends State<ShippingDetails>
       for (var x in mydata) {
         thirdMap.addAll(x['resumen']);
         checkMap.addAll(x['checklist']);
+        // checkMap.addAll(x['revision_canina']);
         //print(x['ingreso']);
         //print(x['checklist']);
-        print(x['revision_canina']);
+        revisionCanMap.addAll(x['revision_canina']);
       }
       thirdMap.forEach((k, v) => resumenListAPITemp.add(ResumenData(k, v)));
       checkMap.forEach((k, v) => checklistAPITemp.add(ResumenData(k, v)));
-      print(resumenListAPITemp);
+      revisionCanMap
+          .forEach((k, v) => revisionCaninaAPITemp.add(ResumenData(k, v)));
+      //print(resumenListAPITemp);
+      print(revisionCanMap);
       setState(() {
         resumen = resumenListAPITemp;
         checkList = checklistAPITemp;
+        revisionCanina = revisionCaninaAPITemp;
         data = new List.from(jsonResponse);
       });
-      print(resumen);
+      //print(resumen);
+
       if (jsonResponse != Null) {}
     } else if (res.statusCode == 401) {
       print("Error de autenticación");
@@ -436,6 +445,7 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                     children: [
                                       Expanded(
                                           child: ListView.separated(
+                                              physics: ClampingScrollPhysics(),
                                               separatorBuilder:
                                                   (BuildContext context,
                                                       int index) {
@@ -447,8 +457,8 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                               itemBuilder:
                                                   (BuildContext context,
                                                       position) {
-                                                print("Data length: ");
                                                 var check = checkList[position];
+                                                print(check);
                                                 return Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
@@ -474,8 +484,50 @@ class _ShippingDetailsState extends State<ShippingDetails>
                                               })),
                                     ])))
                       ]),
-
-                      Text("Ventana tab 3"),
+                      Column(children: [
+                        Expanded(
+                            child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                          child: ListView.separated(
+                                              separatorBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return Divider(
+                                                    height: 5,
+                                                    color: Colors.grey[300]);
+                                              },
+                                              itemCount: revisionCanina.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      position) {
+                                                print("Data length: ");
+                                                var revisionCan =
+                                                    revisionCanina[position];
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  10))),
+                                                  child: ListTile(
+                                                    onTap: () {},
+                                                    leading:
+                                                        Icon(Icons.list_alt),
+                                                    title: Text(
+                                                        "${revisionCan.title}"),
+                                                    subtitle: Text(
+                                                        "${revisionCan.value}"),
+                                                  ),
+                                                );
+                                              })),
+                                    ])))
+                      ]),
                     ],
                   )),
                 ],

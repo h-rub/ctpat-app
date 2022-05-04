@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
                       children: [
                         Text(
                             // TODO: Hacerlo dinámico
-                            "Miercoles 10 Noviembre 2021\nBienvenido ${userInfo.firstName}",
+                            "Bienvenido ${userInfo.firstName}",
                             style: body),
                         GestureDetector(
                           onTap: () {

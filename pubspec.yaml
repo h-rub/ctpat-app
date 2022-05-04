@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations: # Add this line
+    sdk: flutter         # Add this line
   cupertino_icons: ^1.0.0
   flutter_dash: ^0.0.1
   get: ^3.24.0
@@ -36,6 +38,8 @@ dependencies:
   shared_preferences: ^0.5.12+4
   validators: ^2.0.1
   fa_stepper: ^0.0.2
+  flutter_easyloading: ^2.2.2
+  date_format: ^1.0.9
 
 
 dev_dependencies:
